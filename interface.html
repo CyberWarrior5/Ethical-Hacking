@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screen Stream</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <style>
+        #screen {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #monitorButtons {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="monitorButtons"></div>
+    <img id="screen" src="" alt="Screen Stream">
+
+    <script>
+        var socket = io();
+        var screen = document.getElementById('screen');
+        var monitorButtons = document.getElementById('monitorButtons');
+
+        socket.on('connect', function () {
+            console.log('Connected to server');
+        });
+
+        socket.on('screen_update', function (data) {
+            console.log("Received screen update, image size:", data.image.length);
+            screen.src = 'data:image/jpeg;base64,' + data.image;
+        });
+
+        function createMonitorButtons(count) {
+            monitorButtons.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                let button = document.createElement('button');
+                button.textContent = 'Monitor ' + (i + 1);
+                button.onclick = function () {
+                    console.log("Switching to monitor:", i);
+                    socket.emit('switch_monitor', { monitor: i });
+                };
+                monitorButtons.appendChild(button);
+            }
+        }
+
+        fetch('/get_monitor_count')
+            .then(response => response.json())
+            .then(data => {
+                console.log("Monitor count:", data.count);
+                createMonitorButtons(data.count);
+            });
+    </script>
+</body>
+
+</html>
