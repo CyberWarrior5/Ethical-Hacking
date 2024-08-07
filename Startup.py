@@ -15,8 +15,8 @@ STARTUP_DIR = os.path.expanduser(
 )
 USER_DIR = os.path.expanduser("~")
 CURRENT_DIR = os.getcwd()
-SCREEN_RECORDER_PATH = os.path.join(CURRENT_DIR, "ScreenRecording Software")
-FILE_TRANSFER_DIR = os.path.join(CURRENT_DIR, "FileTransfer")
+SCREEN_RECORDER_PATH = CURRENT_DIR
+FILE_TRANSFER_DIR = CURRENT_DIR
 USER_DIR_SCREEN_RECORDER = os.path.join(USER_DIR, "ScreenRecorder")
 
 
